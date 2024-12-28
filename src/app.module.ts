@@ -3,6 +3,7 @@ import { SpeechScriptModule } from './speech-script/speech-script.module';
 import { DatabaseModule } from './database/database.module';
 import { SttModule } from './stt/stt.module';
 import { ConfigModule } from '@nestjs/config';
+import { RecordModule } from './record/record.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    RecordModule,
   ],
 })
 export class AppModule {}
