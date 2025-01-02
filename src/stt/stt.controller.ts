@@ -39,11 +39,12 @@ export class SttController {
   })
   async handleFileUpload(
     @UploadedFile() file: Express.Multer.File,
+    @Body('lang') lang: string,
   ): Promise<CommonResponse<string>> {
     if (!file) {
       throw new Error('파일이 업로드되지 않았습니다.');
     }
-    const response = await this.sttService.transcribeAudio(file.buffer);
+    const response = await this.sttService.transcribeAudio(file.buffer, lang);
     return CommonResponse.success(response);
   }
 
