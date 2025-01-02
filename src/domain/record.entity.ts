@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsInt } from 'class-validator';
 import { BaseEntity } from './base.entity';
 
 @Entity('record')
@@ -10,7 +10,8 @@ export class RecordEntity extends BaseEntity {
   @Column({ type: 'longblob' })
   audio: Buffer;
 
-  @Column()
+  @IsInt()
+  @Column({ name: 'scriptId' })
   scriptId: number;
 
   @IsBoolean()

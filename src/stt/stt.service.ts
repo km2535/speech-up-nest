@@ -82,7 +82,6 @@ export class SttService {
     sttEntity.createdAt = new Date();
     sttEntity.modifiedAt = new Date();
     sttEntity.isUse = true;
-    console.log(sttEntity);
     const result = await this.sttRepository.save(sttEntity);
     return SttGetResponse.of(result);
   }

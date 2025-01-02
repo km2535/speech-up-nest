@@ -1,6 +1,8 @@
 import {
   Controller,
+  Get,
   Param,
+  ParseIntPipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -8,6 +10,7 @@ import {
 import { RecordService } from './record.service';
 import { ApiBody, ApiConsumes, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RecordGetResponse } from './dto/record-get-response';
 
 @Controller('record')
 export class RecordController {
@@ -41,8 +44,15 @@ export class RecordController {
   })
   async addRecord(
     @UploadedFile() file: Express.Multer.File,
-    @Param() scriptId: number,
+    @Param('scriptId', ParseIntPipe) scriptId: number,
   ) {
     await this.recordService.createRecord(file, scriptId);
+  }
+
+  @Get('/:scriptId')
+  async getAudioList(
+    @Param('scriptId', ParseIntPipe) scriptId: number,
+  ): Promise<RecordGetResponse[]> {
+    return await this.recordService.findRecord(scriptId);
   }
 }
