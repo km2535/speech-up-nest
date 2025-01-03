@@ -18,7 +18,7 @@ async function bootstrap() {
 
   // CORS 설정
   app.enableCors({
-    origin: process.env.CORS_DOMAIN, // 허용할 도메인 (프론트엔드 주소)
+    origin: [process.env.CORS_DOMAIN_BASIC, process.env.CORS_DOMAIN_WWW], // 허용할 도메인 (프론트엔드 주소)
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 허용할 HTTP 메서드
     allowedHeaders: 'Content-Type, Authorization', // 허용할 헤더
     credentials: true, // 쿠키 전송 허용
