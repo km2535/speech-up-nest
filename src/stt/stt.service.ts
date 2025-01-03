@@ -1,24 +1,13 @@
-import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import OpenAI from 'openai';
-import { SttCreateRequest } from './dto/stt-create-request';
-import { SttEntity } from '../domain/stt.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { SpeechScriptEntity } from '../domain/speech-script.entity';
-import { Repository } from 'typeorm';
-import { SttGetResponse } from './dto/stt-get-response';
 
 @Injectable()
 export class SttService {
   private readonly openai: OpenAI;
 
-  constructor(
-    @InjectRepository(SpeechScriptEntity)
-    private speechScriptRepository: Repository<SpeechScriptEntity>,
-    @InjectRepository(SttEntity)
-    private sttRepository: Repository<SttEntity>,
-  ) {
+  constructor() {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // OpenAI API 키 설정
     });
@@ -68,25 +57,5 @@ export class SttService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  @Post()
-  async createStt(createRequest: SttCreateRequest): Promise<SttGetResponse> {
-    const sttEntity = new SttEntity();
-    sttEntity.sttContent = createRequest.sttContent;
-    // 스크립트 조회
-    const speechScript: SpeechScriptEntity =
-      await this.speechScriptRepository.findOne({
-        where: {
-          scriptId: createRequest.scriptId,
-        },
-      });
-    // 조회된 스크립트의 컨텐츠를 저장
-    sttEntity.scriptContent = speechScript.content;
-    sttEntity.createdAt = new Date();
-    sttEntity.modifiedAt = new Date();
-    sttEntity.isUse = true;
-    const result = await this.sttRepository.save(sttEntity);
-    return SttGetResponse.of(result);
   }
 }

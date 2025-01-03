@@ -47,17 +47,4 @@ export class SttController {
     const response = await this.sttService.transcribeAudio(file.buffer, lang);
     return CommonResponse.success(response);
   }
-
-  @Post()
-  @ApiOperation({
-    summary: 'STT 결과를 DB에 저장',
-    description: 'STT 결과를 스크립트와 함께 DB에 저장',
-  })
-  async sttSave(
-    @Body() createRequest: SttCreateRequest,
-  ): Promise<CommonResponse<SttGetResponse>> {
-    return CommonResponse.success(
-      await this.sttService.createStt(createRequest),
-    );
-  }
 }
